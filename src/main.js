@@ -25,7 +25,14 @@ let config = {
     },
     width: 1280,
     height: 800,
-    scene: [Load, Pathfinder]
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
+    },
+    scene: [Load, CharacterController]
 }
 
 var cursors;

@@ -19,7 +19,7 @@ class Load extends Phaser.Scene {
         
 
          // ...and pass to the next Scene
-         this.scene.start("pathfinderScene");
+         this.scene.start("characterController");
     }
 
     // Never get here since a new scene is started in create()
