@@ -1,7 +1,9 @@
-**Pathfinder**
+** Little Crops**
 
-A starter project for working with [EasyStar](https://github.com/prettymuchbryce/easystarjs)
-pathfinding using tile-based worlds (edited using [Tiled](https://www.mapeditor.org/)) inside Phaser.
+Made by Damon Phan and James Chen
 
-Art assets from the following Kenney Asset packs: [Tiny Dungeon](https://kenney.nl/assets/tiny-dungeon)
-and [Tiny Town](https://kenney.nl/assets/tiny-town), used with gratitude.
+A farming game about growing crops, selling them, and upgrading your house!
+
+Edited using [Tiled](https://www.mapeditor.org/)
+
+Art assets from cupnoodle: [Sprout Lands] (https://cupnooble.itch.io/sprout-lands-asset-pack)
