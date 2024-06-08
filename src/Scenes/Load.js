@@ -12,14 +12,14 @@ class Load extends Phaser.Scene {
 
         // Load tilemap information
         this.load.image("tilemap_tiles", "tilemap_packed.png");                   // Packed tilemap
-        this.load.tilemapTiledJSON("three-farmhouses", "three-farmhouses.tmj");   // Tilemap in JSON
+        // this.load.tilemapTiledJSON("three-farmhouses", "three-farmhouses.tmj");   // Tilemap in JSON
     }
 
     create() {
         
 
-         // ...and pass to the next Scene
-         this.scene.start("characterController");
+        // ...and pass to the next Scene
+        this.scene.start("tilemap");
     }
 
     // Never get here since a new scene is started in create()
