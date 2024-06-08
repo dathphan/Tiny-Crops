@@ -7,8 +7,8 @@ class Tilemap extends Phaser.Scene {
         this.load.setPath("./assets/");
 
         // Load tilemap information
-        this.load.image("world-tileset", "small-crops-tiles.png");           // Packed tilemap
-        this.load.tilemapTiledJSON("farm-tilemap", "farm-tilemap.tmj");   // Tilemap in JSON
+        this.load.image("world-tileset", "small-crops-tiles.png");          // Packed tilemap
+        this.load.tilemapTiledJSON("farm-tilemap", "farm-tilemap.tmj");     // Tilemap in JSON
     }
 
     init() {
@@ -20,10 +20,13 @@ class Tilemap extends Phaser.Scene {
 
     create() {
         this.createMap();
+        this.setCamera();
+    }
 
+    setCamera() {
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.setZoom(this.SCALE);
-    }   
+    }
 
     createMap() {
         this.map = this.add.tilemap("farm-tilemap", this.TILESIZE, this.TILESIZE, this.TILEHEIGHT, this.TILEWIDTH);
