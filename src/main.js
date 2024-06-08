@@ -32,7 +32,7 @@ let config = {
             debug: false
         }
     },
-    scene: [Load, CharacterController, Tilemap]
+    scene: [Load, Title, CharacterController, Tilemap, Ending]
 }
 
 var cursors;
