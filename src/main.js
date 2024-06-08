@@ -25,7 +25,14 @@ let config = {
     },
     width: 1280,
     height: 800,
-    scene: [Load, Title, Ending, Pathfinder]
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 0 },
+            debug: false
+        }
+    },
+    scene: [Load, Title, CharacterController, Tilemap, Ending]
 }
 
 var cursors;

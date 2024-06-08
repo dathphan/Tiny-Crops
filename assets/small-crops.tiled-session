@@ -1,0 +1,79 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "": {
+            "scaleInDock": 3,
+            "scaleInEditor": 1
+        },
+        "farm-tilemap.tmj": {
+            "scale": 2.4818749999999996,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 320.12087635356335,
+                "y": 199.8489045580459
+            }
+        },
+        "farm-tilemap.tmj#kenney-tiny-town": {
+            "scaleInDock": 1
+        },
+        "farm-tilemap.tmx": {
+            "scale": 3,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 329.5,
+                "y": 179.33333333333334
+            }
+        },
+        "farm-tilemap.tmx#Grass Tiles": {
+            "scaleInDock": 3,
+            "scaleInEditor": 1
+        },
+        "farm-tilemap.tmx#Ground Grass": {
+            "scaleInDock": 3,
+            "scaleInEditor": 1
+        },
+        "farm-tilemap.tmx#Soil": {
+            "scaleInDock": 3
+        },
+        "farm-tilemap.tmx#Trees, stumps and bushes": {
+            "scaleInDock": 1.5
+        },
+        "three-farmhouses.tmj": {
+            "scale": 2.162734375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 277.6577683054582,
+                "y": 200.20951486471841
+            }
+        },
+        "three-farmhouses.tmj#kenney-tiny-town": {
+            "scaleInDock": 2
+        }
+    },
+    "last.exportedFilePath": "C:/Users/dp701/Documents/GitHub/Tiny Crops/assets",
+    "last.imagePath": "C:/Users/dp701/Documents/GitHub/Tiny Crops/assets/Tilesets/ground tiles/New tiles",
+    "map.lastUsedExportFilter": "JSON map files (*.tmj *.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+    ],
+    "project": "small-crops.tiled-project",
+    "recentFiles": [
+        "farm-tilemap.tmj",
+        "farm-tilemap.tmx",
+        "three-farmhouses.tmj"
+    ],
+    "tileset.embedInMap": true,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}
