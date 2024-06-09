@@ -7,7 +7,7 @@ class Ending extends Phaser.Scene { //this is the ending screen
 
     create(){
         
-        this.add.text(600, 150, "YOU WIN!",{  //YOU WIN!
+        this.add.text(600, 150, "YOU WIN!",{  
             fontSize: 80
         }).setOrigin(0.5);
 
@@ -15,7 +15,6 @@ class Ending extends Phaser.Scene { //this is the ending screen
             fontSize: 50
         }).setOrigin(0.5);
 
-        
         this.add.text(600, 550, "press Q to return to menu", {
             fontSize: 50
         }).setOrigin(0.5);
@@ -26,12 +25,11 @@ class Ending extends Phaser.Scene { //this is the ending screen
 
     update(){
         if (Phaser.Input.Keyboard.JustDown(this.spacebarpress)) {//restarts game if space is pressed.
-            this.scene.start("pathfinderScene");
+            this.scene.start("tilemap");
         }
         
         if (Phaser.Input.Keyboard.JustDown(this.Q)) { //goes to menu if q if pressed
             this.scene.start("title");
         }
     }
-    
 }
