@@ -11,14 +11,14 @@
     "fileStates": {
         "": {
             "scaleInDock": 3,
-            "scaleInEditor": 1
+            "scaleInEditor": 4
         },
         "farm-tilemap.tmj": {
-            "scale": 4,
-            "selectedLayer": 4,
+            "scale": 2,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 319.625,
-                "y": 85.25
+                "x": 226.75,
+                "y": 197
             }
         },
         "farm-tilemap.tmj#kenney-tiny-town": {
@@ -68,6 +68,7 @@
         "farm-tilemap.tmj"
     ],
     "project": "small-crops.tiled-project",
+    "property.type": "bool",
     "recentFiles": [
         "farm-tilemap.tmj",
         "farm-tilemap.tmx",

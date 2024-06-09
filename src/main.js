@@ -29,10 +29,10 @@ let config = {
         default: 'arcade',
         arcade: {
             gravity: { y: 0 },
-            debug: false
+            debug: true
         }
     },
-    scene: [Load, Title, CharacterController, Tilemap, Ending]
+    scene: [Load, Main, Title, CharacterController, Tilemap, Ending]
 }
 
 var cursors;
