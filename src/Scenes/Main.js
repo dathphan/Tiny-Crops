@@ -18,16 +18,28 @@ class Main extends Phaser.Scene {
 
         // Tilemap Information
         this.load.image("world-tileset", "small-crops-tiles.png");          // Packed tilemap
+        this.load.image("signs-tileset", "Objects/signs.png");
         this.load.tilemapTiledJSON("farm-tilemap", "farm-tilemap.tmj");     // Tilemap in JSON
 
+        // NPC Information
+        this.load.image("buyer", "blue_townie.png", {
+            frameWidth: 18,
+            frameHeight: 18
+        });
+        this.load.image("seller", "purple_townie.png", {
+            frameWidth: 18,
+            frameHeight: 18
+        });
     }
 
     init() {
+        //Tilemap Constants
         this.TILESIZE = 16;
         this.SCALE = 2.0;
         this.TILEWIDTH = 40;
         this.TILEHEIGHT = 25;
 
+        //Player Constants
         this.PLAYERSPEED = 50;
         this.direction = "down";
     }
@@ -46,42 +58,76 @@ class Main extends Phaser.Scene {
         my.sprite.player.body.setOffset(18, 24);
         my.sprite.player.play('idle_left');
         my.sprite.player.setCollideWorldBounds(true);
+
+        //Player Collision Setup
         this.physics.add.collider(my.sprite.player, this.hillsLayer);
         this.physics.add.collider(my.sprite.player, this.plantLayer);
+        this.physics.add.collider(my.sprite.player, this.houseLayer);
 
+        //Debug
         this.input.keyboard.on('keydown-F1', () => {
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
             this.physics.world.debugGraphic.clear()
         }, this);
+
+        //Keeps track of score for buying and selling.
+        this.money = 0
+        this.moneycheck = this.add.text(10,10,this.money);
+
+        //keeps track of the crops planted.
+        this.currentCrops = [];
     }
 
     update() {
         this.updatePlayerMovement();
         this.updatePlayerAnimations();
+        if(Phaser.Input.Keyboard.JustDown(this.interact)){
+            this.checkForInteraction();
+        }
+        this.moneyChecker();
+        this.cropTick();
     }
 
-    setCamera() {
+    setCamera() {//Camera Setup
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
         this.cameras.main.setZoom(this.SCALE);
     }
 
-    createMap() {
+    createMap() {//Creates map based on Tilemap
         this.map = this.add.tilemap("farm-tilemap", this.TILESIZE, this.TILESIZE, this.TILEHEIGHT, this.TILEWIDTH);
 
         // Add a tileset to the map
         this.tileset = this.map.addTilesetImage("kenney-tiny-town", "world-tileset");
+        this.tileset2 = this.map.addTilesetImage("signs", "signs-tileset");
+        this.npcInteraction = this.map.getObjectLayer("NPCs");
 
         // Create the layers
         this.soilLayer = this.map.createLayer("Soil", this.tileset, 0, 0);
         this.grassLayer = this.map.createLayer("Grass", this.tileset, 0, 0);
         this.hillsLayer = this.map.createLayer("Hills", this.tileset, 0, 0);
-        this.plantLayer = this.map.createLayer("Plants", this.tileset, 0, 0);
+        this.plantLayer = this.map.createLayer("Plants", [this.tileset, this.tileset2], 0, 0);
+        this.houseLayer = this.map.createLayer("House", this.tileset, 0, 0);
+        
+        // Create the object layers.
+        this.Buyers = this.map.createFromObjects("NPCs", {
+            name: "Buyer",
+            key: "buyer",
+            gid: 1
+        }, true);
 
+        this.Sellers = this.map.createFromObjects("NPCs", {
+            name: "Seller",
+            key: "seller",
+            gid: 1
+        }, true); 
+
+        //Collision Properties
         this.hillsLayer.setCollisionByProperty({ collides: true });
         this.plantLayer.setCollisionByProperty({ collides: "true" });
+        this.houseLayer.setCollisionByProperty({ collides: true });
     }
 
-    createAnimations() {
+    createAnimations() {//Player walking and idle animations
         let framerate = 12
 
         this.anims.create({
@@ -145,7 +191,7 @@ class Main extends Phaser.Scene {
         return {start: index * 8, end: index * 8 + 7 }
     }
 
-    initalizeInputs() {
+    initalizeInputs() {//Player Inputs
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wasd = this.input.keyboard.addKeys({
             up: Phaser.Input.Keyboard.KeyCodes.W,
@@ -153,9 +199,10 @@ class Main extends Phaser.Scene {
             left: Phaser.Input.Keyboard.KeyCodes.A,
             right: Phaser.Input.Keyboard.KeyCodes.D
         });
+        this.interact = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE); 
     }
 
-    updatePlayerMovement() {
+    updatePlayerMovement() {//Player movement and direction
         my.sprite.player.setVelocity(0);
         
         let up = (this.cursors.up.isDown || this.wasd.up.isDown) ? 1 : 0;
@@ -167,9 +214,10 @@ class Main extends Phaser.Scene {
         my.sprite.player.setVelocityY(this.PLAYERSPEED * (down - up));
         my.sprite.player.setVelocityX(this.PLAYERSPEED * (right - left));
         console.log((right - left))
+        //could add walking SFX or particles if have time
     }
 
-    updatePlayerAnimations() {
+    updatePlayerAnimations() {//Player animations checker
 
         let player = my.sprite.player
         let dir;
@@ -196,5 +244,69 @@ class Main extends Phaser.Scene {
             player.play(animation);
         }
         this.direction = dir
+    }
+
+    checkForInteraction() {//if the interact key is pressed, check for conditions that affect 
+        console.log("interact!");//Will be used for all the interations, However, seems very complex. Maybe make into switch case?
+        /*
+        if(above crop && crop ready){
+            Harvest Crop
+            remove from currentCrop
+            sfx
+            update map
+        }
+        else if(above crop && crop not ready){
+            sfx    
+        }
+
+        if(above dirt && has seeds){
+            Plant Seed
+            push to currentCrop
+            sfx
+            update map
+        }
+        else if(above dirt && no seeds){
+            sfx
+        }
+
+        if(next to Seller && has money) {
+            buy seed
+            sfx
+            update money
+        } 
+        else if(next to Seller && has no money) {
+            sfx
+        }
+
+        if(next to Buyer && has crop) {
+            Sell crop
+            sfx
+            update money
+        }
+        else if(next to Buyer && has crop) {
+            sfx
+        }
+
+        else{
+            nothing happens
+        }
+        */
+    }
+
+    moneyChecker(){ //Keeps track of the money that you have left. 
+        this.moneycheck.destroy();
+        this.moneycheck = this.add.text(10, 10, "Coins: " + this.money);
+    }
+
+    cropTick(){ //Keeps track of crop and their growth time.
+        /*
+        for(let i = 0; i < this.currentCrops.length();i++){
+            if(this.currentCrops[i].grown == false){
+                this.currentCrops[i].time += 1;
+                if(this.currentCrops[i].time >= this.currentCrops[i].max) {
+                    this.currentCrops[i].grown = true;
+                }
+            }
+        }*/
     }
 }
