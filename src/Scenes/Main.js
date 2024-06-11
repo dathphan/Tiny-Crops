@@ -53,22 +53,18 @@ class Main extends Phaser.Scene {
         this.createAnimations();
         this.initalizeInputs();
         
-        my.sprite.player = this.physics.add.sprite(this.TILESIZE * this.TILEWIDTH / 2, this.TILESIZE * this.TILEHEIGHT / 2, 'player');
-        my.sprite.player.body.setSize(12, 8);
-        my.sprite.player.body.setOffset(18, 24);
-        my.sprite.player.play('idle_left');
-        my.sprite.player.setCollideWorldBounds(true);
-
-        //Player Collision Setup
-        this.physics.add.collider(my.sprite.player, this.hillsLayer);
-        this.physics.add.collider(my.sprite.player, this.plantLayer);
-        this.physics.add.collider(my.sprite.player, this.houseLayer);
+        this.createPlayer();
 
         //Debug
         this.input.keyboard.on('keydown-F1', () => {
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
             this.physics.world.debugGraphic.clear()
         }, this);
+
+        // TEMP THIS IS TO TEST FARM UPGRADES
+        this.upgradeFarm(1)
+        this.upgradeFarm(2)
+        this.children.bringToTop(my.sprite.player);
 
         //Keeps track of score for buying and selling.
         this.money = 10
@@ -116,7 +112,7 @@ class Main extends Phaser.Scene {
         this.grassLayer = this.map.createLayer("Grass", this.tileset, 0, 0);
         this.hillsLayer = this.map.createLayer("Hills", this.tileset, 0, 0);
         this.plantLayer = this.map.createLayer("Plants", [this.tileset, this.tileset2], 0, 0);
-        this.houseLayer = this.map.createLayer("House", this.tileset, 0, 0);
+        // this.houseLayer = this.map.createLayer("House", this.tileset, 0, 0);
         
         // Create the object layers.
         this.Buyers = this.map.createFromObjects("NPCs", {
@@ -134,7 +130,21 @@ class Main extends Phaser.Scene {
         //Collision Properties
         this.hillsLayer.setCollisionByProperty({ collides: true });
         this.plantLayer.setCollisionByProperty({ collides: "true" });
-        this.houseLayer.setCollisionByProperty({ collides: true });
+        // this.houseLayer.setCollisionByProperty({ collides: true });
+    }
+
+    createPlayer() {
+        // Setting up Player
+        my.sprite.player = this.physics.add.sprite(this.TILESIZE * this.TILEWIDTH / 2, this.TILESIZE * this.TILEHEIGHT / 2, 'player');
+        my.sprite.player.body.setSize(12, 8);
+        my.sprite.player.body.setOffset(18, 24);
+        my.sprite.player.play('idle_left');
+        my.sprite.player.setCollideWorldBounds(true);
+
+        //Player Collision Setup
+        this.physics.add.collider(my.sprite.player, this.hillsLayer);
+        this.physics.add.collider(my.sprite.player, this.plantLayer);
+        this.physics.add.collider(my.sprite.player, this.houseLayer);
     }
 
     createAnimations() {//Player walking and idle animations
@@ -405,7 +415,30 @@ class Main extends Phaser.Scene {
         }*/
     }
 
-    win(){
+    win() {
         this.scene.start("ending");
+    }
+
+    upgradeFarm(upgradeIndex) {
+        switch (upgradeIndex) {
+            case 1:
+                let upgrade1 = this.map.createLayer("Upgrade-1", this.tileset, 0, 0);
+                upgrade1.setCollisionByProperty({ collides: true });
+                this.physics.add.collider(my.sprite.player, upgrade1);
+                break;
+            case 2:
+                let upgrade21 = this.map.createLayer("Upgrade-2-1", this.tileset, 0, 0);
+                let upgrade22 = this.map.createLayer("Upgrade-2-2", this.tileset, 0, 0);
+                upgrade21.setCollisionByProperty({ collides: true });
+                upgrade22.setCollisionByProperty({ collides: true });
+                this.physics.add.collider(my.sprite.player, upgrade21);
+                this.physics.add.collider(my.sprite.player, upgrade22);
+                break;
+            case 3:
+                let upgrade3 = this.map.createLayer("Upgrade-3-1", this.tileset, 0, 0);
+                upgrade3.setCollisionByProperty({ collides: true });
+                this.physics.add.collider(my.sprite.player, upgrade3);
+                break;
+        }
     }
 }
