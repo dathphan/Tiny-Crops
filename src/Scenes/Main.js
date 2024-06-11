@@ -71,11 +71,21 @@ class Main extends Phaser.Scene {
         }, this);
 
         //Keeps track of score for buying and selling.
-        this.money = 0
+        this.money = 10
         this.moneycheck = this.add.text(10,10,this.money);
 
         //keeps track of the crops planted.
         this.currentCrops = [];
+
+        //For keeping track of what plants and seeds you have 
+        this.carrot = 0;
+        this.tomato = 0;
+        this.bluestar = 0;
+        this.carrotseed = 5;
+        this.tomatoseed = 0;
+        this.bluestarseed = 0;
+
+        this.upgrades = 0;
     }
 
     update() {
@@ -213,7 +223,6 @@ class Main extends Phaser.Scene {
 
         my.sprite.player.setVelocityY(this.PLAYERSPEED * (down - up));
         my.sprite.player.setVelocityX(this.PLAYERSPEED * (right - left));
-        console.log((right - left))
         //could add walking SFX or particles if have time
     }
 
@@ -247,11 +256,118 @@ class Main extends Phaser.Scene {
     }
 
     checkForInteraction() {//if the interact key is pressed, check for conditions that affect 
-        console.log("interact!");//Will be used for all the interations, However, seems very complex. Maybe make into switch case?
+        let player = my.sprite.player
+        //console.log(player.body.x, player.body.y);
+        if((70 <= player.body.y && player.body.y <= 140) && (288 <= player.body.x && player.body.x <= 356)){ //reduce search time through seperating the crops, NPCs, and upgrade options. This is due to the y values being in seperate zones.
+            //check if near upgrade station
+            console.log("Upgrades: " + this.upgrades);
+            switch(this.upgrades){
+                case(0):
+                    if(this.money >= 8){//prevent possible softlock by having the player always have at least one money to buy seeds.
+                        this.money -= 7;
+                        this.upgrades = 1;
+                        //update map
+                    }
+                    break;
+                case(1):
+                    if(this.money >= 17){
+                        this.money -= 16;
+                        this.upgrades = 2;
+                        //update map
+                    }
+                    break;
+                case(2):
+                    if(this.money >= 28){
+                        this.money -= 27;
+                        this.upgrades = 3;
+                        //update map
+                    }
+                    break;
+                case(3):
+                    win();
+                default:    
+                    console.log("default");
+            }
+        }
+        else if(176 <= player.body.y && player.body.y < 210) { //check if near NPCS
+            if(70 <= player.body.x && player.body.x <= 90){
+                console.log("npc1");
+                if(this.money > 0){
+                    this.carrotseed += 1;
+                    //this.money -= 1;
+                }
+                else{
+                    console.log("no money sfx");
+                }
+            }
+            if(105 <= player.body.x && player.body.x <= 125){
+                console.log("npc2");
+                if(this.money > 1){
+                    this.tomatoseed += 1;
+                    //this.money -= 2;
+                }
+                else{
+                    console.log("no money sfx");                    
+                }
+            }
+            if(140 <= player.body.x && player.body.x <= 155){
+                console.log("npc3");
+                if(this.money > 3){
+                    this.bluestarseed += 1;
+                    //this.money -= 4;
+                }
+                else{
+                    console.log("no moneysfx");                    
+                }
+            }
+            if(505 <= player.body.x && player.body.x <= 525){
+                console.log("npc4");
+                if(this.carrot > 1){
+                    this.money += 2;
+                    this.carrot -= 1;
+                }
+                else{
+                    console.log("no carrot sfx");
+                }
+            }
+            if(535 <= player.body.x && player.body.x <= 555){
+                console.log("npc5");
+                if(this.tomato > 1){
+                    this.money += 4;
+                    //this.tomato -= 1;
+                }
+                else{
+                    console.log("no tomato sfx");
+                }
+            }
+            if(570 <= player.body.x && player.body.x <= 580){
+                console.log("npc6");
+                if(this.bluestar > 1){
+                    this.money += 8;
+                    //this.bluestar -= 1;
+                }
+                else{
+                    console.log("no blue star fruit sfx");
+                }
+            }
+        }
+        else if (player.body.y > 220){//check if near crops
+            if(110 <= player.body.x && player.body.x <= 215 && 235 <= player.body.y && player.body.y <= 315) {
+                console.log("crops1");
+            }
+            if(270 <= player.body.x && player.body.x <= 375 && 250 <= player.body.y && player.body.y <=330) {
+                console.log("crops2");
+            }
+            if(430 <= player.body.x && player.body.x <= 505 && 235 <= player.body.y && player.body.y <= 315) {
+                console.log("crops3");
+            }
+
+        }
+        else{}//nothing happens if not on these tiles.
         /*
         if(above crop && crop ready){
-            Harvest Crop
-            remove from currentCrop
+            this.carrot += 1;
+            removeCurrentCrop(crop);
             sfx
             update map
         }
@@ -260,42 +376,20 @@ class Main extends Phaser.Scene {
         }
 
         if(above dirt && has seeds){
-            Plant Seed
-            push to currentCrop
+            this.carrotSeed -= 1;
+            this.currentCrops.push(crop);
             sfx
             update map
         }
         else if(above dirt && no seeds){
             sfx
         }
-
-        if(next to Seller && has money) {
-            buy seed
-            sfx
-            update money
-        } 
-        else if(next to Seller && has no money) {
-            sfx
-        }
-
-        if(next to Buyer && has crop) {
-            Sell crop
-            sfx
-            update money
-        }
-        else if(next to Buyer && has crop) {
-            sfx
-        }
-
-        else{
-            nothing happens
-        }
         */
     }
 
     moneyChecker(){ //Keeps track of the money that you have left. 
         this.moneycheck.destroy();
-        this.moneycheck = this.add.text(10, 10, "Coins: " + this.money);
+        this.moneycheck = this.add.text(10, 10, "Money: " + this.money);
     }
 
     cropTick(){ //Keeps track of crop and their growth time.
@@ -308,5 +402,9 @@ class Main extends Phaser.Scene {
                 }
             }
         }*/
+    }
+
+    win(){
+        this.scene.start("ending");
     }
 }
