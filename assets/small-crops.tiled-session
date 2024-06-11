@@ -14,15 +14,15 @@
             "scaleInEditor": 4
         },
         "farm-tilemap.tmj": {
-            "scale": 2,
-            "selectedLayer": 2,
+            "scale": 3,
+            "selectedLayer": 7,
             "viewCenter": {
-                "x": 226.75,
-                "y": 197
+                "x": 321.16666666666663,
+                "y": 202.66666666666663
             }
         },
         "farm-tilemap.tmj#kenney-tiny-town": {
-            "scaleInDock": 2
+            "scaleInDock": 1.5
         },
         "farm-tilemap.tmx": {
             "scale": 3,
