@@ -53,7 +53,7 @@ class Main extends Phaser.Scene {
         this.createAnimations();
         this.initalizeInputs();
         
-        my.sprite.player = this.physics.add.sprite(400, 300, 'player');
+        my.sprite.player = this.physics.add.sprite(this.TILESIZE * this.TILEWIDTH / 2, this.TILESIZE * this.TILEHEIGHT / 2, 'player');
         my.sprite.player.body.setSize(12, 8);
         my.sprite.player.body.setOffset(18, 24);
         my.sprite.player.play('idle_left');
