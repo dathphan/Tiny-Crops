@@ -40,7 +40,7 @@ class Main extends Phaser.Scene {
         this.TILEHEIGHT = 25;
 
         //Player Constants
-        this.PLAYERSPEED = 50;
+        this.PLAYERSPEED = 75;
         this.direction = "down";
     }
 
@@ -72,12 +72,12 @@ class Main extends Phaser.Scene {
 
         //Keeps track of score for buying and selling.
         this.money = 10
-        this.moneycheck = this.add.text(10,10,this.money);
+        this.moneycheck = this.add.text(10,10, "Money: " + this.money);
 
         //keeps track of the crops planted.
         this.currentCrops = [];
 
-        //For keeping track of what plants and seeds you have 
+        //For keeping track of what plants and seeds you have + number of house upgrades.
         this.carrot = 0;
         this.tomato = 0;
         this.bluestar = 0;
@@ -93,8 +93,8 @@ class Main extends Phaser.Scene {
         this.updatePlayerAnimations();
         if(Phaser.Input.Keyboard.JustDown(this.interact)){
             this.checkForInteraction();
+            this.moneyChecker();
         }
-        this.moneyChecker();
         this.cropTick();
     }
 
@@ -255,12 +255,11 @@ class Main extends Phaser.Scene {
         this.direction = dir
     }
 
-    checkForInteraction() {//if the interact key is pressed, check for conditions that affect 
+    checkForInteraction() {//if the interact key (space key) is pressed, check for conditions that affect 
         let player = my.sprite.player
-        //console.log(player.body.x, player.body.y);
-        if((70 <= player.body.y && player.body.y <= 140) && (288 <= player.body.x && player.body.x <= 356)){ //reduce search time through seperating the crops, NPCs, and upgrade options. This is due to the y values being in seperate zones.
-            //check if near upgrade station
-            switch(this.upgrades){
+        //reduce search time through seperating the crops, NPCs, and upgrade options. This is due to the y values being in seperate zones.
+        if((70 <= player.body.y && player.body.y <= 140) && (288 <= player.body.x && player.body.x <= 356)){ //checks if player is in the upgrade section
+            switch(this.upgrades){//check if can upgrade
                 case(0):
                     if(this.money >= 8){//prevent possible softlock by having the player always have at least one money to buy seeds.
                         this.money -= 7;
@@ -288,68 +287,65 @@ class Main extends Phaser.Scene {
                 case(3):
                     win();
                 default:    
-                    console.log("default");
+                    console.log("no money sfx");
             }
         }
         else if(176 <= player.body.y && player.body.y < 210) { //check if near NPCS
-            if(70 <= player.body.x && player.body.x <= 90){
-                console.log("npc1");
+            if(70 <= player.body.x && player.body.x <= 90){//CarrotSeed selling NPC
                 if(this.money > 0){
                     this.carrotseed += 1;
-                    //this.money -= 1;
+                    this.money -= 1;
                     console.log("purchase sfx");
                 }
                 else{
                     console.log("no money sfx");
                 }
             }
-            if(105 <= player.body.x && player.body.x <= 125){
-                console.log("npc2");
+            if(105 <= player.body.x && player.body.x <= 125){//TomatoSeed selling NPC
                 if(this.money > 1){
                     this.tomatoseed += 1;
-                    //this.money -= 2;
+                    this.money -= 2;
                     console.log("purchase sfx");
                 }
                 else{
                     console.log("no money sfx");                    
                 }
             }
-            if(140 <= player.body.x && player.body.x <= 155){
-                console.log("npc3");
+            if(140 <= player.body.x && player.body.x <= 155){//BlueStarFruitSeed selling NPC
                 if(this.money > 3){
                     this.bluestarseed += 1;
-                    //this.money -= 4;
+                    this.money -= 4;
                     console.log("purchase sfx");
                 }
                 else{
-                    console.log("no moneysfx");                    
+                    console.log("no money sfx");                    
                 }
             }
-            if(505 <= player.body.x && player.body.x <= 525){
-                console.log("npc4");
+            if(505 <= player.body.x && player.body.x <= 525){//Carrot buying NPC
                 if(this.carrot > 1){
                     this.money += 2;
                     this.carrot -= 1;
+                    console.log("money.sfx");
                 }
                 else{
                     console.log("no carrot sfx");
                 }
             }
-            if(535 <= player.body.x && player.body.x <= 555){
-                console.log("npc5");
+            if(535 <= player.body.x && player.body.x <= 555){//Tomato buying NPC
                 if(this.tomato > 1){
                     this.money += 4;
-                    //this.tomato -= 1;
+                    this.tomato -= 1;
+                    console.log("money.sfx");
                 }
                 else{
                     console.log("no tomato sfx");
                 }
             }
-            if(570 <= player.body.x && player.body.x <= 580){
-                console.log("npc6");
+            if(570 <= player.body.x && player.body.x <= 580){//BlueStarFruit buying NPC
                 if(this.bluestar > 1){
                     this.money += 8;
-                    //this.bluestar -= 1;
+                    this.bluestar -= 1;
+                    console.log("money.sfx");
                 }
                 else{
                     console.log("no blue star fruit sfx");

@@ -12,10 +12,7 @@ Art assets from cupnoodle: [Sprout Lands](https://cupnooble.itch.io/sprout-lands
 Things left to do:
 plant seeds <br>
 collect produce <br>
-sell produce<br>
 update seed tile<br>
 update funiture tile<br>
-buy seeds<br>
-sell produce<br>
 "speech"<br>
 game juice<br>
