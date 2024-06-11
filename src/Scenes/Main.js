@@ -260,12 +260,12 @@ class Main extends Phaser.Scene {
         //console.log(player.body.x, player.body.y);
         if((70 <= player.body.y && player.body.y <= 140) && (288 <= player.body.x && player.body.x <= 356)){ //reduce search time through seperating the crops, NPCs, and upgrade options. This is due to the y values being in seperate zones.
             //check if near upgrade station
-            console.log("Upgrades: " + this.upgrades);
             switch(this.upgrades){
                 case(0):
                     if(this.money >= 8){//prevent possible softlock by having the player always have at least one money to buy seeds.
                         this.money -= 7;
                         this.upgrades = 1;
+                        console.log("purchase sfx");
                         //update map
                     }
                     break;
@@ -273,6 +273,7 @@ class Main extends Phaser.Scene {
                     if(this.money >= 17){
                         this.money -= 16;
                         this.upgrades = 2;
+                        console.log("purchase sfx");
                         //update map
                     }
                     break;
@@ -280,6 +281,7 @@ class Main extends Phaser.Scene {
                     if(this.money >= 28){
                         this.money -= 27;
                         this.upgrades = 3;
+                        console.log("purchase sfx");
                         //update map
                     }
                     break;
@@ -295,6 +297,7 @@ class Main extends Phaser.Scene {
                 if(this.money > 0){
                     this.carrotseed += 1;
                     //this.money -= 1;
+                    console.log("purchase sfx");
                 }
                 else{
                     console.log("no money sfx");
@@ -305,6 +308,7 @@ class Main extends Phaser.Scene {
                 if(this.money > 1){
                     this.tomatoseed += 1;
                     //this.money -= 2;
+                    console.log("purchase sfx");
                 }
                 else{
                     console.log("no money sfx");                    
@@ -315,6 +319,7 @@ class Main extends Phaser.Scene {
                 if(this.money > 3){
                     this.bluestarseed += 1;
                     //this.money -= 4;
+                    console.log("purchase sfx");
                 }
                 else{
                     console.log("no moneysfx");                    
