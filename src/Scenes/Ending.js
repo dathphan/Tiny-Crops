@@ -25,7 +25,7 @@ class Ending extends Phaser.Scene { //this is the ending screen
 
     update(){
         if (Phaser.Input.Keyboard.JustDown(this.spacebarpress)) {//restarts game if space is pressed.
-            this.scene.start("tilemap");
+            this.scene.start("main");
         }
         
         if (Phaser.Input.Keyboard.JustDown(this.Q)) { //goes to menu if q if pressed

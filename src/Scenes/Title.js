@@ -23,7 +23,7 @@ class Title extends Phaser.Scene { //this is the title screen
         this.Credits.setInteractive({useHandCursor: true});
         
         this.Start.on("pointerdown", () => {//starts the game when pressed.
-            this.scene.start("tilemap");
+            this.scene.start("main");
         });
 
         this.Credits.on("pointerdown", () => {//opens the credits when pressed
