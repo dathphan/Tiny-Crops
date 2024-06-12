@@ -277,19 +277,16 @@ class Main extends Phaser.Scene {
         }
 
         else if (player.body.y > 220){//check if near crops
-            if(112 < player.body.x && player.body.x < 224 && 240 < player.body.y && player.body.y < 320) {
+            if(112 < player.body.x && player.body.x < 224 && 240 < player.body.y && player.body.y < 320) {//carrot field
                 this.cropCheck();
             }
-            else if(272 < player.body.x && player.body.x < 384 && 256 < player.body.y && player.body.y < 336) {
+            else if(272 < player.body.x && player.body.x < 384 && 256 < player.body.y && player.body.y < 336) {//tomato field
                 this.cropCheck();
             }
-            else if(432 < player.body.x && player.body.x < 544 && 240 < player.body.y && player.body.y <  320) {
+            else if(432 < player.body.x && player.body.x < 544 && 240 < player.body.y && player.body.y <  320) {//blue star field
                 this.cropCheck();
             }
-
         }
-        else{}//nothing happens if not on these tiles.
-        
     }
 
     moneyChecker(){ //Keeps track of the money that you have left. 
@@ -318,15 +315,15 @@ class Main extends Phaser.Scene {
 
     cropPlant(Searcher){//plants a crop on the tile only if you have the seeds for it.
         if(Searcher[0] < 225 && this.carrotseed > 0){
-            this.carrotseed -= 1; //push some sort of object or array to currentCrops
+            this.carrotseed -= 1; //push some sort of object or array to currentCrops + update the map (2)
             console.log("planting sfx");
         }
         else if(Searcher[0] > 431 && this.bluestarseed > 0){
-            this.bluestarseed -= 1;
+            this.bluestarseed -= 1;//same here (2)
             console.log("planting sfx");
         }
         else if(this.tomatoseed > 0){
-            this.tomatoseed -= 1;
+            this.tomatoseed -= 1;//and here (2)
             console.log("planting sfx");
         }
         else{
@@ -334,23 +331,22 @@ class Main extends Phaser.Scene {
         }
     }
 
-    cropCollect(Searcher){//collects the crop and 
+    cropCollect(Searcher){//collects the crop and delete/(make inactive?) the crop.
         if(Searcher[0] < 225){ //&& this.currentCrops[index].grown
-            this.carrot += 1;//then delete this.currentCrops[index]
+            this.carrot += 1;//then delete this.currentCrops[index] + update the map (3)
             console.log("collecting sfx");
         }
         else if(Searcher[0] > 431){ //&& this.currentCrops[index].grown
-            this.bluestar += 1;
+            this.bluestar += 1;//same here (3)
             console.log("collecting sfx");
         }
         else if(true){ //replace with this.currentCrops[index].grown
-            this.tomato += 1;
+            this.tomato += 1;//same here (3)
             console.log("collecting sfx");
         }
         else{
-            console.log("not ready SFX");
+            console.log("not ready sfx");
         }
-        
     }
 
     cropCheck(){ //checks if the current tile is empty or not. 
@@ -417,7 +413,8 @@ class Main extends Phaser.Scene {
                 console.log("no money sfx");
         }
     }
-    NPCtalk(PlayerX){
+
+    NPCtalk(PlayerX){ //checks the player's position and respond with the right NPC depending on the X location.
         if(70 <= PlayerX && PlayerX <= 90){//CarrotSeed selling NPC
             if(this.money > 0){
                 this.carrotseed += 1;
