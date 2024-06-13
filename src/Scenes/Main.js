@@ -7,46 +7,6 @@ class Main extends Phaser.Scene {
         this.scene.start("end");
     }
 
-    preload() { //may move to load.js
-        this.load.setPath("./assets/");
-
-        // Player Movemment
-        this.load.spritesheet({
-            key: 'player',
-            url: 'Characters/Premium Charakter Spritesheet.png',
-            frameConfig: {
-                frameWidth: 48,
-                frameHeight: 48,
-            }
-        });
-
-        // Tilemap Information
-        this.load.image("world-tileset", "small-crops-tiles.png");          // Packed tilemap
-        this.load.image("signs-tileset", "Objects/signs.png");
-        this.load.tilemapTiledJSON("farm-tilemap", "farm-tilemap.tmj");     // Tilemap in JSON
-
-        // NPC Information
-        this.load.image("buyer", "blue_townie.png", {
-            frameWidth: 18,
-            frameHeight: 18
-        });
-
-        this.load.image("seller", "purple_townie.png", {
-            frameWidth: 18,
-            frameHeight: 18
-        });
-
-        //Crops
-        this.load.spritesheet({
-            key: "crops",
-            url: "Objects/Farming Plants.png",
-            frameConfig: {
-                frameHeight: 16,
-                frameWidth: 16
-            }
-        })
-    }
-
     init() {
         //Tilemap Constants
         this.TILESIZE = 16;

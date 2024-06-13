@@ -5,22 +5,47 @@ class Load extends Phaser.Scene { //May be redundant
 
     preload() {
         this.load.setPath("./assets/");
+        // Player Movemment
+        this.load.spritesheet({
+            key: 'player',
+            url: 'Characters/Premium Charakter Spritesheet.png',
+            frameConfig: {
+                frameWidth: 48,
+                frameHeight: 48,
+            }
+        });
 
-//OLD CODE TO BE DELETED FROM HERE...
-        // Load townsfolk
-        this.load.image("purple", "purple_townie.png");
-        this.load.image("blue", "blue_townie.png");
+        // Tilemap Information
+        this.load.image("world-tileset", "small-crops-tiles.png");          // Packed tilemap
+        this.load.image("signs-tileset", "Objects/signs.png");
+        this.load.tilemapTiledJSON("farm-tilemap", "farm-tilemap.tmj");     // Tilemap in JSON
 
-        // Load tilemap information
-        this.load.image("tilemap_tiles", "tilemap_packed.png");                   // Packed tilemap
-        // this.load.tilemapTiledJSON("three-farmhouses", "three-farmhouses.tmj");   // Tilemap in JSON
-//...TO HERE.
+        // NPC Information
+        this.load.image("buyer", "blue_townie.png", {
+            frameWidth: 18,
+            frameHeight: 18
+        });
+
+        this.load.image("seller", "purple_townie.png", {
+            frameWidth: 18,
+            frameHeight: 18
+        });
+
+        //Crops
+        this.load.spritesheet({
+            key: "crops",
+            url: "Objects/Farming Plants.png",
+            frameConfig: {
+                frameHeight: 16,
+                frameWidth: 16
+            }
+        })
     }
 
     create() {
 
         // ...and pass to the next Scene
-        this.scene.start("main");
+        this.scene.start("title");
     }
 
 }

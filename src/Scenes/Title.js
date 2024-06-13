@@ -3,8 +3,6 @@ class Title extends Phaser.Scene { //this is the title screen
         super("title");
     }
 
-    //Note: Title Screen can become better. This is the working title screen for now. ////////Delete this comment when game title screen is better///////////////////////////
-
     create(){ 
         
         this.add.text(600, 150, "Little Crops",{  //title
@@ -15,7 +13,7 @@ class Title extends Phaser.Scene { //this is the title screen
             fontSize: 50,
         }).setOrigin(0.5);
         
-        this.Credits = this.add.text(600, 650, "CREDITS",{ //credits button
+        this.Credits = this.add.text(600, 650, "CREDITS/CONTROLS",{ //credits button
             fontSize: 50,
         }).setOrigin(0.5);
 
@@ -29,7 +27,7 @@ class Title extends Phaser.Scene { //this is the title screen
         this.Credits.on("pointerdown", () => {//opens the credits when pressed
             this.CreditBackground = this.add.rectangle(600, 400, 1200, 800, "0x000000"); 
             this.CreditBackground.setInteractive({useHandCursor: true}); 
-            this.CreditText = this.add.text(50, 50, "CREDITS:\nMade by Damon Phan and James Chen\nMade for CMPM 120\nMade in Phaser, using Tiled\nArt assets by cupnoodle: Sprout Lands \n\n\n\n\n\n           *click to exit*",{ 
+            this.CreditText = this.add.text(50, 50, "CREDITS:\nMade by Damon Phan and James Chen\nMade for CMPM 120\nMade in Phaser, using Tiled\nArt assets by cupnoodle: Sprout Lands.\nTo play, use WASD or the arrow keys to move and space to interact with the ground, NPCs, or the house. Buy seeds on the left, plant the in the middle, sell them on the right, and upgrade your house on the top.\n\n\n           *click to exit*",{ 
                 fontSize: 50,
                 wordWrap: { 
                     width: 1200
