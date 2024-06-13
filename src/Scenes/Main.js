@@ -38,7 +38,19 @@ class Main extends Phaser.Scene {
 
         //Keeps track of score for buying and selling.
         this.money = 10; 
-        this.moneycheck = this.add.text(10,10, "Money: " + this.money);
+        this.carrot = 0;
+        this.tomato = 0;
+        this.bluestar = 0;
+        this.carrotseed = 5;
+        this.tomatoseed = 0;
+        this.bluestarseed = 0;
+
+        this.add.image(32, 163, "inventory"); 
+        this.inventory = this.add.text(32, 100, `${this.money}\n${this.carrotseed}\n${this.tomatoseed}\n${this.bluestarseed}\n${this.carrot}\n${this.tomato}\n${this.bluestar}`, {
+            fontFamily: 'Silkscreen',
+            fontSize: '16px',
+            lineSpacing: -0.5
+        }); 
 
         //keeps track of the crops planted.
         this.currentCrops = [];
@@ -60,7 +72,7 @@ class Main extends Phaser.Scene {
         this.NPCbubble()
         if(Phaser.Input.Keyboard.JustDown(this.interact)){
             this.checkForInteraction();
-            this.moneyChecker();
+            this.updateInventory();
         }
     }
 
@@ -275,9 +287,8 @@ class Main extends Phaser.Scene {
         }
     }
 
-    moneyChecker(){ //Keeps track of the money that you have left. 
-        this.moneycheck.destroy();
-        this.moneycheck = this.add.text(10, 10, "Money: " + this.money);
+    updateInventory() {
+        this.inventory.setText(`${this.money}\n${this.carrotseed}\n${this.tomatoseed}\n${this.bluestarseed}\n${this.carrot}\n${this.tomato}\n${this.bluestar}`);
     }
 
     cropTick(){ //Keeps track of crop and their growth time.

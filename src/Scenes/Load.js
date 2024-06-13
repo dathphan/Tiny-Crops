@@ -39,6 +39,7 @@ class Load extends Phaser.Scene { //May be redundant
                 frameHeight: 32,
             }
         });
+        this.load.image("inventory", "inventory.png");
 
         //Crops
         this.load.spritesheet({
