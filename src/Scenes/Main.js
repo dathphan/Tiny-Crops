@@ -30,10 +30,21 @@ class Main extends Phaser.Scene {
             frameWidth: 18,
             frameHeight: 18
         });
+
         this.load.image("seller", "purple_townie.png", {
             frameWidth: 18,
             frameHeight: 18
         });
+
+        //Crops
+        this.load.spritesheet({
+            key: "crops",
+            url: "Objects/Farming Plants.png",
+            frameConfig: {
+                frameHeight: 16,
+                frameWidth: 16
+            }
+        })
     }
 
     init() {
@@ -65,7 +76,7 @@ class Main extends Phaser.Scene {
         }, this);
 
         //Keeps track of score for buying and selling.
-        this.money = 100; //Change back to 10 before final Push ----------------------------------------------------------------------------------------------------
+        this.money = 10; 
         this.moneycheck = this.add.text(10,10, "Money: " + this.money);
 
         //keeps track of the crops planted.
@@ -78,7 +89,6 @@ class Main extends Phaser.Scene {
         this.carrotseed = 5;
         this.tomatoseed = 0;
         this.bluestarseed = 0;
-
         this.upgrades= 1;
     }
 
@@ -110,7 +120,6 @@ class Main extends Phaser.Scene {
         this.grassLayer = this.map.createLayer("Grass", this.tileset, 0, 0);
         this.hillsLayer = this.map.createLayer("Hills", this.tileset, 0, 0);
         this.plantLayer = this.map.createLayer("Plants", [this.tileset, this.tileset2], 0, 0);
-        // this.houseLayer = this.map.createLayer("House", this.tileset, 0, 0);
         
         // Create the object layers.
         this.Buyers = this.map.createFromObjects("NPCs", {
@@ -128,7 +137,6 @@ class Main extends Phaser.Scene {
         //Collision Properties
         this.hillsLayer.setCollisionByProperty({ collides: true });
         this.plantLayer.setCollisionByProperty({ collides: "true" });
-        // this.houseLayer.setCollisionByProperty({ collides: true });
     }
 
     createPlayer() {
@@ -142,7 +150,6 @@ class Main extends Phaser.Scene {
         //Player Collision Setup
         this.physics.add.collider(my.sprite.player, this.hillsLayer);
         this.physics.add.collider(my.sprite.player, this.plantLayer);
-        this.physics.add.collider(my.sprite.player, this.houseLayer);
     }
 
     createAnimations() {//Player walking and idle animations
@@ -278,13 +285,13 @@ class Main extends Phaser.Scene {
 
         else if (player.body.y > 220){//check if near crops
             if(112 < player.body.x && player.body.x < 224 && 240 < player.body.y && player.body.y < 320) {//carrot field
-                this.cropCheck();
+                this.cropCheck(1);
             }
             else if(272 < player.body.x && player.body.x < 384 && 256 < player.body.y && player.body.y < 336) {//tomato field
-                this.cropCheck();
+                this.cropCheck(2);
             }
             else if(432 < player.body.x && player.body.x < 544 && 240 < player.body.y && player.body.y <  320) {//blue star field
-                this.cropCheck();
+                this.cropCheck(3);
             }
         }
     }
@@ -295,15 +302,26 @@ class Main extends Phaser.Scene {
     }
 
     cropTick(){ //Keeps track of crop and their growth time.
-        /*
-        for(let i = 0; i < this.currentCrops.length();i++){
-            if(this.currentCrops[i].grown == false){
+        for(let i = 0; i < this.currentCrops.length;i++){
+            if(this.currentCrops[i].grown == false){//prevents unessecary checking
                 this.currentCrops[i].time += 1;
-                if(this.currentCrops[i].time >= this.currentCrops[i].max) {
+                if(this.currentCrops[i].time >= this.currentCrops[i].max) { //grows to final frame and can be collected.
                     this.currentCrops[i].grown = true;
+                    this.currentCrops[i].framenum += 1;
+                    this.currentCrops[i].setTexture("crops", this.currentCrops[i].framenum);
+                }
+                else if(this.currentCrops[i].time >= this.currentCrops[i].max / 2 && !this.currentCrops[i].thirdframe) { //used for growing to 3rd frame 
+                    this.currentCrops[i].framenum += 1;
+                    this.currentCrops[i].setTexture("crops", this.currentCrops[i].framenum );
+                    this.currentCrops[i].thirdframe = true;
+                }
+                else if(this.currentCrops[i].time >= this.currentCrops[i].max / 4 && !this.currentCrops[i].secondframe) { //used for growing to 2nd frame
+                    this.currentCrops[i].framenum += 1;
+                    this.currentCrops[i].setTexture("crops", this.currentCrops[i].framenum);
+                    this.currentCrops[i].secondframe = true;
                 }
             }
-        }*/
+        }
     }
 
     tileLocation(){//Returns the approximate tile location the player is on. Useful for crop locations.
@@ -313,17 +331,40 @@ class Main extends Phaser.Scene {
         return [tempx, tempy];
     }
 
-    cropPlant(Searcher){//plants a crop on the tile only if you have the seeds for it.
-        if(Searcher[0] < 225 && this.carrotseed > 0){
-            this.carrotseed -= 1; //push some sort of object or array to currentCrops + update the map (2)
+    cropCheck(FieldNum){ //checks if the current tile is empty or not, and either allows a crop be to planted or picked up.
+        let Searcher = this.tileLocation();
+        let isEmpty = true;
+        for(let i = 0; i < this.currentCrops.length;i++){
+            if(Searcher[0] == this.currentCrops[i].x-8){    
+                if(Searcher[1] == this.currentCrops[i].y-8){
+                    isEmpty = false;
+                    var index = i;
+                    break;
+                }
+            }
+        }
+        if(isEmpty){
+            this.cropPlant(Searcher, FieldNum);
+        }
+        else{
+            this.cropCollect(FieldNum, index); 
+        }
+    }
+
+    cropPlant(Searcher, FieldNum){//plants a crop on the tile only if you have the seeds for it.
+        if(FieldNum == 1 && this.carrotseed > 0){
+            this.carrotseed -= 1; 
+            this.cropInit(Searcher[0], Searcher[1], 0, 360, false, FieldNum);
             console.log("planting sfx");
         }
-        else if(Searcher[0] > 431 && this.bluestarseed > 0){
-            this.bluestarseed -= 1;//same here (2)
+        else if(FieldNum == 2 && this.tomatoseed > 0){
+            this.tomatoseed -= 1;
+            this.cropInit(Searcher[0], Searcher[1], 0, 360, false, FieldNum);
             console.log("planting sfx");
         }
-        else if(this.tomatoseed > 0){
-            this.tomatoseed -= 1;//and here (2)
+        else if(FieldNum == 3 && this.bluestarseed > 0){
+            this.bluestarseed -= 1;
+            this.cropInit(Searcher[0], Searcher[1], 0, 360, false, FieldNum);
             console.log("planting sfx");
         }
         else{
@@ -331,17 +372,47 @@ class Main extends Phaser.Scene {
         }
     }
 
-    cropCollect(Searcher){//collects the crop and delete/(make inactive?) the crop.
-        if(Searcher[0] < 225){ //&& this.currentCrops[index].grown
-            this.carrot += 1;//then delete this.currentCrops[index] + update the map (3)
+    cropInit(x, y, time, max, grown, FieldNum) {//creates a crop and puts it in currentCrops
+        if(FieldNum == 1){
+            var crop = this.add.image(x+8, y+8, "crops", 10);  //x+8 fits the center better 
+        }
+        if(FieldNum == 2){
+            var crop = this.add.image(x+8, y+8, "crops", 20);
+        }
+        if(FieldNum == 3){
+            var crop = this.add.image(x+8, y+8, "crops", 65);
+        }
+        crop.time = time;
+        crop.max = max;
+        crop.grown = grown;
+        crop.FieldNum = FieldNum;
+        crop.framenum = FieldNum * 10; 
+        crop.secondframe = false; 
+        crop.thirdframe = false;
+        if(FieldNum == 3){
+            crop.framenum = 65;
+        }
+        this.currentCrops.push(crop);
+        this.children.bringToTop(my.sprite.player);
+    }
+
+    cropCollect(FieldNum, index){//collects the crop and delete the crop.
+        if(FieldNum == 1 && this.currentCrops[index].grown){ 
+            this.carrot += 1;
+            this.currentCrops[index].destroy();
+            this.currentCrops.splice(index, 1);
             console.log("collecting sfx");
         }
-        else if(Searcher[0] > 431){ //&& this.currentCrops[index].grown
-            this.bluestar += 1;//same here (3)
+        else if(FieldNum == 2 && this.currentCrops[index].grown){
+            this.tomato += 1;
+            this.currentCrops[index].destroy();
+            this.currentCrops.splice(index, 1);
             console.log("collecting sfx");
         }
-        else if(true){ //replace with this.currentCrops[index].grown
-            this.tomato += 1;//same here (3)
+        else if(FieldNum == 3 && this.currentCrops[index].grown){ 
+            this.bluestar += 1;
+            this.currentCrops[index].destroy();
+            this.currentCrops.splice(index, 1);
             console.log("collecting sfx");
         }
         else{
@@ -349,32 +420,9 @@ class Main extends Phaser.Scene {
         }
     }
 
-    cropCheck(){ //checks if the current tile is empty or not. 
-        let Searcher = this.tileLocation();
-        let isEmpty = true;
-        console.log(Searcher[0]);
-        /* Cannot implement unless currentCrops is implemented
-        for(let i = 0; i < this.currentCrops.length();i++){
-            if(Searcher[0] == this.currentCrops[i].x){    
-                if(Searcher[1] == this.currentCrops[i].y){
-                    isEmpty = false;
-                    let index = i;
-                    break;
-                }
-            }
-        }
-        */
-        if(isEmpty){
-            this.cropPlant(Searcher);
-        }
-        else{
-            this.cropCollect(Searcher); //probably needs index
-        }
-    }
-
     upgradeFarm(upgradeIndex) { //Upgrades the farm if you have money.
         switch (upgradeIndex) {
-            case 1:
+            case 1://Walls + bench + well upgrade
                 if(this.money >= 8){//prevent possible softlock by having the player always have at least one money to buy seeds.
                     this.money -= 7;
                     this.upgrades += 1;
@@ -384,7 +432,7 @@ class Main extends Phaser.Scene {
                     this.physics.add.collider(my.sprite.player, upgrade1);
                 }
                 break;
-            case 2:
+            case 2: //Wall + floor upgrade
                 if(this.money >= 17){
                     this.money -= 16;
                     this.upgrades += 1;
@@ -397,7 +445,7 @@ class Main extends Phaser.Scene {
                     this.physics.add.collider(my.sprite.player, upgrade22);
                 }
                 break;
-            case 3:
+            case 3: //furnish house upgrade
                 if(this.money >= 28){
                     this.money -= 27;
                     this.upgrades += 1;
@@ -407,7 +455,7 @@ class Main extends Phaser.Scene {
                     this.physics.add.collider(my.sprite.player, upgrade3);
                 }
                 break;
-            case 4:
+            case 4://win
                 this.scene.start("end");
             default:
                 console.log("no money sfx");
@@ -446,7 +494,7 @@ class Main extends Phaser.Scene {
             }
         }
         if(505 <= PlayerX && PlayerX <= 525){//Carrot buying NPC
-            if(this.carrot > 1){
+            if(this.carrot > 0){
                 this.money += 2;
                 this.carrot -= 1;
                 console.log("money.sfx");
@@ -456,7 +504,7 @@ class Main extends Phaser.Scene {
             }
         }
         if(535 <= PlayerX && PlayerX <= 555){//Tomato buying NPC
-            if(this.tomato > 1){
+            if(this.tomato > 0){
                 this.money += 4;
                 this.tomato -= 1;
                 console.log("money.sfx");
@@ -465,8 +513,8 @@ class Main extends Phaser.Scene {
                 console.log("no tomato sfx");
             }
         }
-        if(570 <= PlayerX && PlayerX <= 580){//BlueStarFruit buying NPC
-            if(this.bluestar > 1){
+        if(565 <= PlayerX && PlayerX <= 580){//BlueStarFruit buying NPC
+            if(this.bluestar > 0){
                 this.money += 8;
                 this.bluestar -= 1;
                 console.log("money.sfx");

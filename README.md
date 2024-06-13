@@ -10,8 +10,5 @@ Art assets from cupnoodle: [Sprout Lands](https://cupnooble.itch.io/sprout-lands
 
 
 Things left to do:
-plant seeds <br>
-collect produce <br>
-update seed tile<br>
 "speech"<br>
 game juice<br>
