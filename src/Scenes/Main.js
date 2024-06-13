@@ -23,6 +23,7 @@ class Main extends Phaser.Scene {
         // Tilemap Setup
         this.createMap();
         this.setCamera();
+        this.createBubbles();
 
         // Player Setup
         this.createAnimations();
@@ -56,6 +57,7 @@ class Main extends Phaser.Scene {
         this.updatePlayerMovement();
         this.updatePlayerAnimations();
         this.cropTick();
+        this.NPCbubble()
         if(Phaser.Input.Keyboard.JustDown(this.interact)){
             this.checkForInteraction();
             this.moneyChecker();
@@ -110,6 +112,23 @@ class Main extends Phaser.Scene {
         //Player Collision Setup
         this.physics.add.collider(my.sprite.player, this.hillsLayer);
         this.physics.add.collider(my.sprite.player, this.plantLayer);
+    }
+
+    createBubbles() {
+        this.bubbles = [];
+        this.bubbles.push(this.add.sprite(110, 145, 'bubble', 0));
+        this.bubbles.push(this.add.sprite(142, 145, 'bubble', 1));
+        this.bubbles.push(this.add.sprite(174, 145, 'bubble', 2));
+        this.bubbles.push(this.add.sprite(542, 145, 'bubble', 3));
+        this.bubbles.push(this.add.sprite(574, 145, 'bubble', 4));
+        this.bubbles.push(this.add.sprite(606, 145, 'bubble', 5));
+        this.hideBubbles();
+    }
+
+    hideBubbles() {
+        this.bubbles.forEach(bub => {
+            bub.setVisible(false);
+        });
     }
 
     createAnimations() {//Player walking and idle animations
@@ -419,6 +438,33 @@ class Main extends Phaser.Scene {
                 this.scene.start("end");
             default:
                 console.log("no money sfx");
+        }
+    }
+
+    NPCbubble() {
+        let player = my.sprite.player;
+        this.hideBubbles();
+        if(176 > player.body.y || player.body.y >= 210) {
+            return;
+        }
+        let PlayerX = player.body.x;
+        if(70 <= PlayerX && PlayerX <= 90){//CarrotSeed selling NPC
+            this.bubbles[0].setVisible(true);
+        }
+        else if(105 <= PlayerX && PlayerX <= 125){//TomatoSeed selling NPC
+            this.bubbles[1].setVisible(true);
+        }
+        else if(140 <= PlayerX && PlayerX <= 155){//BlueStarFruitSeed selling NPC
+            this.bubbles[2].setVisible(true);
+        }
+        else if(505 <= PlayerX && PlayerX <= 525){//Carrot buying NPC
+            this.bubbles[3].setVisible(true);
+        }
+        else if(535 <= PlayerX && PlayerX <= 555){//Tomato buying NPC
+            this.bubbles[4].setVisible(true);
+        }
+        else if(565 <= PlayerX && PlayerX <= 580){//BlueStarFruit buying NPC
+            this.bubbles[5].setVisible(true);
         }
     }
 

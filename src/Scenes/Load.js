@@ -31,6 +31,15 @@ class Load extends Phaser.Scene { //May be redundant
             frameHeight: 18
         });
 
+        this.load.spritesheet({
+            key: 'bubble',
+            url: 'speech_bubbles.png',
+            frameConfig: {
+                frameWidth: 64,
+                frameHeight: 32,
+            }
+        });
+
         //Crops
         this.load.spritesheet({
             key: "crops",
