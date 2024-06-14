@@ -46,6 +46,7 @@ class Main extends Phaser.Scene {
         this.carrotseed = 5;
         this.tomatoseed = 0;
         this.bluestarseed = 0;
+        this.upgrades= 1;
 
         this.add.image(32, 163, "inventory"); 
         this.inventory = this.add.text(32, 100, `${this.money}\n${this.carrotseed}\n${this.tomatoseed}\n${this.bluestarseed}\n${this.carrot}\n${this.tomato}\n${this.bluestar}`, {
@@ -57,15 +58,7 @@ class Main extends Phaser.Scene {
         //keeps track of the crops planted.
         this.currentCrops = [];
 
-        //For keeping track of what plants and seeds you have + number of house upgrades.
-        this.carrot = 0;
-        this.tomato = 0;
-        this.bluestar = 0;
-        this.carrotseed = 5;
-        this.tomatoseed = 0;
-        this.bluestarseed = 0;
-        this.upgrades= 1;
-
+        //The audio for this project.
         this.createAudio()
     }
 
