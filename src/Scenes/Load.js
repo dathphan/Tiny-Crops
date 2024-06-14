@@ -50,6 +50,15 @@ class Load extends Phaser.Scene { //May be redundant
                 frameWidth: 16
             }
         })
+
+        // Sounds
+        this.load.audio('background-music', 'background-music.ogg');
+        this.load.audio('error', 'error.ogg');
+        this.load.audio('upgrade', 'upgrade.ogg');
+        this.load.audio('sell', 'sell.wav');
+        this.load.audio('purchase', 'purchase.wav');
+        this.load.audio('plant', 'plant.ogg');
+        this.load.audio('pick', 'pick.ogg');
     }
 
     create() {

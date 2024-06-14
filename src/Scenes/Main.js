@@ -4,6 +4,7 @@ class Main extends Phaser.Scene {
     }
 
     win() {
+        this.sound.stopAll();
         this.scene.start("end");
     }
 
@@ -35,6 +36,7 @@ class Main extends Phaser.Scene {
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
             this.physics.world.debugGraphic.clear()
         }, this);
+        this.physics.world.drawDebug = false;
 
         //Keeps track of score for buying and selling.
         this.money = 10; 
@@ -63,6 +65,8 @@ class Main extends Phaser.Scene {
         this.tomatoseed = 0;
         this.bluestarseed = 0;
         this.upgrades= 1;
+
+        this.createAudio()
     }
 
     update() {
@@ -207,6 +211,17 @@ class Main extends Phaser.Scene {
         return {start: index * 8, end: index * 8 + 7 }
     }
 
+    createAudio() {
+        this.sfxPick = this.sound.add('pick', {volume: 0.8});
+        this.sfxError = this.sound.add('error', {volume: 0.2});
+        this.sfxUpgrade = this.sound.add('upgrade', {volume: 0.8});
+        this.sfxSell = this.sound.add('sell', {volume: 0.8});
+        this.sfxPlant = this.sound.add('plant', {volume: 0.6});
+        this.sfxPurchase = this.sound.add('purchase', {volume: 0.8});
+
+        this.sound.add('background-music', { loop: true }).play();
+    }
+
     initalizeInputs() {//Player Inputs
         this.cursors = this.input.keyboard.createCursorKeys();
         this.wasd = this.input.keyboard.addKeys({
@@ -345,20 +360,20 @@ class Main extends Phaser.Scene {
         if(FieldNum == 1 && this.carrotseed > 0){
             this.carrotseed -= 1; 
             this.cropInit(Searcher[0], Searcher[1], 0, 360, false, FieldNum);
-            console.log("planting sfx");
+            this.sfxPlant.play();
         }
         else if(FieldNum == 2 && this.tomatoseed > 0){
             this.tomatoseed -= 1;
             this.cropInit(Searcher[0], Searcher[1], 0, 360, false, FieldNum);
-            console.log("planting sfx");
+            this.sfxPlant.play();
         }
         else if(FieldNum == 3 && this.bluestarseed > 0){
             this.bluestarseed -= 1;
             this.cropInit(Searcher[0], Searcher[1], 0, 360, false, FieldNum);
-            console.log("planting sfx");
+            this.sfxPlant.play();
         }
         else{
-            console.log("no seed sfx");
+            this.sfxError.play();
         }
     }
 
@@ -391,22 +406,22 @@ class Main extends Phaser.Scene {
             this.carrot += 1;
             this.currentCrops[index].destroy();
             this.currentCrops.splice(index, 1);
-            console.log("collecting sfx");
+            this.sfxPick.play();
         }
         else if(FieldNum == 2 && this.currentCrops[index].grown){
             this.tomato += 1;
             this.currentCrops[index].destroy();
             this.currentCrops.splice(index, 1);
-            console.log("collecting sfx");
+            this.sfxPick.play();
         }
         else if(FieldNum == 3 && this.currentCrops[index].grown){ 
             this.bluestar += 1;
             this.currentCrops[index].destroy();
             this.currentCrops.splice(index, 1);
-            console.log("collecting sfx");
+            this.sfxPick.play();
         }
         else{
-            console.log("not ready sfx");
+            this.sfxError.play();
         }
     }
 
@@ -416,7 +431,7 @@ class Main extends Phaser.Scene {
                 if(this.money >= 8){//prevent possible softlock by having the player always have at least one money to buy seeds.
                     this.money -= 7;
                     this.upgrades += 1;
-                    console.log("purchase sfx");
+                    this.sfxUpgrade.play();
                     let upgrade1 = this.map.createLayer("Upgrade-1", this.tileset, 0, 0);
                     upgrade1.setCollisionByProperty({ collides: true });
                     this.physics.add.collider(my.sprite.player, upgrade1);
@@ -426,7 +441,7 @@ class Main extends Phaser.Scene {
                 if(this.money >= 17){
                     this.money -= 16;
                     this.upgrades += 1;
-                    console.log("purchase sfx");
+                    this.sfxUpgrade.play();
                     let upgrade21 = this.map.createLayer("Upgrade-2-1", this.tileset, 0, 0);
                     let upgrade22 = this.map.createLayer("Upgrade-2-2", this.tileset, 0, 0);
                     upgrade21.setCollisionByProperty({ collides: true });
@@ -439,7 +454,7 @@ class Main extends Phaser.Scene {
                 if(this.money >= 28){
                     this.money -= 27;
                     this.upgrades += 1;
-                    console.log("purchase sfx");
+                    this.sfxUpgrade.play();
                     let upgrade3 = this.map.createLayer("Upgrade-3-1", this.tileset, 0, 0);
                     upgrade3.setCollisionByProperty({ collides: true });
                     this.physics.add.collider(my.sprite.player, upgrade3);
@@ -448,7 +463,7 @@ class Main extends Phaser.Scene {
             case 4://win
                 this.scene.start("end");
             default:
-                console.log("no money sfx");
+                this.sfxError.play();
         }
     }
 
@@ -484,60 +499,60 @@ class Main extends Phaser.Scene {
             if(this.money > 0){
                 this.carrotseed += 1;
                 this.money -= 1;
-                console.log("purchase sfx");
+                this.sfxPurchase.play();
             }
             else{
-                console.log("no money sfx");
+                this.sfxError.play();
             }
         }
         if(105 <= PlayerX && PlayerX <= 125){//TomatoSeed selling NPC
             if(this.money > 1){
                 this.tomatoseed += 1;
                 this.money -= 2;
-                console.log("purchase sfx");
+                this.sfxPurchase.play();
             }
             else{
-                console.log("no money sfx");                    
+                this.sfxError.play();
             }
         }
         if(140 <= PlayerX && PlayerX <= 155){//BlueStarFruitSeed selling NPC
             if(this.money > 3){
                 this.bluestarseed += 1;
                 this.money -= 4;
-                console.log("purchase sfx");
+                this.sfxPurchase.play();
             }
             else{
-                console.log("no money sfx");                    
+                this.sfxError.play();                  
             }
         }
         if(505 <= PlayerX && PlayerX <= 525){//Carrot buying NPC
             if(this.carrot > 0){
                 this.money += 2;
                 this.carrot -= 1;
-                console.log("money.sfx");
+                this.sfxPurchase.play();
             }
             else{
-                console.log("no carrot sfx");
+                this.sfxError.play();
             }
         }
         if(535 <= PlayerX && PlayerX <= 555){//Tomato buying NPC
             if(this.tomato > 0){
                 this.money += 4;
                 this.tomato -= 1;
-                console.log("money.sfx");
+                this.sfxPurchase.play();
             }
             else{
-                console.log("no tomato sfx");
+                this.sfxError.play();
             }
         }
         if(565 <= PlayerX && PlayerX <= 580){//BlueStarFruit buying NPC
             if(this.bluestar > 0){
                 this.money += 8;
                 this.bluestar -= 1;
-                console.log("money.sfx");
+                this.sfxPurchase.play();
             }
             else{
-                console.log("no blue star fruit sfx");
+                this.sfxError.play();
             }
         }
     }
