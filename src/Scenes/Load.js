@@ -4,6 +4,7 @@ class Load extends Phaser.Scene { //May be redundant
     }
 
     preload() {
+        this.load.script('webfont', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js');
         this.load.setPath("./assets/");
         // Player Movemment
         this.load.spritesheet({
@@ -62,9 +63,18 @@ class Load extends Phaser.Scene { //May be redundant
     }
 
     create() {
+        WebFont.load({
+            google: {
+                families: ['Silkscreen']
+            }
+        });
+    }
 
-        // ...and pass to the next Scene
-        this.scene.start("title");
+    update(time) {
+        if (time > 1000) { 
+            console.log("FUCK");
+            this.scene.start("title");
+        }
     }
 
 }

@@ -24,9 +24,11 @@ class Title extends Phaser.Scene { //this is the title screen
         this.hillsLayer = this.map.createLayer("Hills", this.tileset, 0, 0);
         this.plantLayer = this.map.createLayer("Plants", [this.tileset, this.tileset2], 0, 0);
 
-        
         this.add.rectangle(300, 200, 800, 400, "0x000000", 0.5);
+        this.titleText();
+    }
 
+    titleText() {
         this.add.text(300, 75, "Little Crops",{  //title
             fontFamily: 'Silkscreen',
             color: '#78a158',
