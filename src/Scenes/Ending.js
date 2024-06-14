@@ -3,8 +3,6 @@ class Ending extends Phaser.Scene { //this is the ending screen
         super("end");
     }
 
-//As of now, no way of using this. Will work to look better later. 
-
     create(){
         
         this.add.text(600, 150, "YOU WIN!",{  

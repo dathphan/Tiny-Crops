@@ -3,7 +3,7 @@ class Main extends Phaser.Scene {
         super("main");
     }
 
-    win() {
+    win() {//Wins the game and moves to the Ending Scene
         this.sound.stopAll();
         this.scene.start("end");
     }
@@ -130,7 +130,7 @@ class Main extends Phaser.Scene {
         this.physics.add.collider(my.sprite.player, this.plantLayer);
     }
 
-    createBubbles() {
+    createBubbles() { //Creates bubbles that reveal NPC's exchange rate
         this.bubbles = [];
         this.bubbles.push(this.add.sprite(110, 145, 'bubble', 0));
         this.bubbles.push(this.add.sprite(142, 145, 'bubble', 1));
@@ -141,7 +141,7 @@ class Main extends Phaser.Scene {
         this.hideBubbles();
     }
 
-    hideBubbles() {
+    hideBubbles() {// initially hide bubbles so to make them unintrustive 
         this.bubbles.forEach(bub => {
             bub.setVisible(false);
         });
@@ -211,7 +211,7 @@ class Main extends Phaser.Scene {
         return {start: index * 8, end: index * 8 + 7 }
     }
 
-    createAudio() {
+    createAudio() { //declares all sound effects and main background music
         this.sfxPick = this.sound.add('pick', {volume: 0.8});
         this.sfxError = this.sound.add('error', {volume: 0.2});
         this.sfxUpgrade = this.sound.add('upgrade', {volume: 0.8});
@@ -302,7 +302,7 @@ class Main extends Phaser.Scene {
         }
     }
 
-    updateInventory() {
+    updateInventory() {// changes the inventory after spending money or produce.
         this.inventory.setText(`${this.money}\n${this.carrotseed}\n${this.tomatoseed}\n${this.bluestarseed}\n${this.carrot}\n${this.tomato}\n${this.bluestar}`);
     }
 
@@ -467,7 +467,7 @@ class Main extends Phaser.Scene {
         }
     }
 
-    NPCbubble() {
+    NPCbubble() { //When player is close to an NPC, show the chat bubble of what they are selling/buying.
         let player = my.sprite.player;
         this.hideBubbles();
         if(176 > player.body.y || player.body.y >= 210) {

@@ -72,7 +72,6 @@ class Load extends Phaser.Scene { //May be redundant
 
     update(time) {
         if (time > 1000) { 
-            console.log("FUCK");
             this.scene.start("title");
         }
     }
